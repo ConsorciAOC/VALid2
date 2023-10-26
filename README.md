@@ -476,28 +476,10 @@ A continuació es mostren uns exemples de les evidencies que es generen en cada 
 
 La comunicació amb el servei de la Base de Dades de la Seu de la Direcció General d'Atenció Ciutadana i Difusió (en endavant DGACD) es realitza via uns serveis REST que intercanvien missatges JSON.
 
-Els missatges que s'enregistren com a evidència són els missatges de petició i resposta generats pels serveis del CAOC que consulten la base de dades. El missatge de resposta incorpora a l'element //resultat/evidencia el missatge JSON obtingut del servei final de la DGACD que conté, a la vegada, les dades contingudes en la resposta signades en format CMS.
-
 | _Exemple petició_ |
 | --- |
 ```xml
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Peticio xmlns:ns2="http://www.aoc.cat/pci/serveis-comuns/bd-seu" xmlns="http://www.aoc.cat/pci/serveis-comuns">
-	<Operacio>BDSEU_CONSULTAR_DADES</Operacio>
-	<Aplicacio>APLICACIO</Aplicacio>
-	<Organisme>9821920002</Organisme>
-	<PeticioOperacio>
-		<ns2:peticioConsultaDades>
-			<ns2:dadesContacte>
-				<ns2:document>DOCUMENT</ns2:document>
-				<ns2:telefon>
-					<ns2:prefix>0034</ns2:prefix>
-					<ns2:numero>MOBIL</ns2:numero>
-				</ns2:telefon>
-			</ns2:dadesContacte>
-		</ns2:peticioConsultaDades>
-	</PeticioOperacio>
-</Peticio>
+{"documentId":"47778894M","telefon":{"prefix":"0034","numero":"626213433","tipusTelefonid":null}}
 ```
 
 
@@ -506,43 +488,8 @@ Els missatges que s'enregistren com a evidència són els missatges de petició 
 | _Exemple resposta_ |
 | --- |
 ```xml
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Resposta xmlns:ns2="http://www.aoc.cat/pci/serveis-comuns/bd-seu" xmlns="http://www.aoc.cat/pci/serveis-comuns">
-	<Operacio>BDSEU_CONSULTAR_DADES</Operacio>
-	<Aplicacio>APLICACIO</Aplicacio>
-	<Timestamp>2014-09-21T10:54:48.534+02:00</Timestamp>
-	<Organisme>9821920002</Organisme>
-	<Estat>
-		<CodiEstat>0003</CodiEstat>
-		<LiteralError/>
-	</Estat>
-	<RespostaOperacio>
-		<ns2:respostaConsultaDades>
-			<ns2:peticioConsultaDades>
-				<ns2:dadesContacte>
-					<ns2:document>DOCUMENT</ns2:document>
-					<ns2:telefon>
-						<ns2:prefix>0034</ns2:prefix>
-						<ns2:numero>MÒBIL</ns2:numero>
-					</ns2:telefon>
-				</ns2:dadesContacte>
-			</ns2:peticioConsultaDades>
-        <ns2:dadesUsuari>
-          	<ns2:nom>NOM</ns2:nom>
-         	<ns2:primerCognom>PRIMER COGNOM</ns2:primerCognom>
-         	<ns2:segonCognom>SEGON COGNOM</ns2:segonCognom>
-          	<ns2:email>EMAIL 1</ns2:email>
-          	<ns2:email>EMAIL N</ns2:email>
-        </ns2:dadesUsuari>
-			<ns2:resultat>
-				<ns2:codiResultat>01</ns2:codiResultat>
-				<ns2:descripcio>Document d'identificació i mòbil relacionats</ns2:descripcio>
-				<ns2:evidencia>eyJ0ZWxlZm9uIjp7InByZWZpeCI6IjAw 
-				(. . .) jAxIn0=</ns2:evidencia>
-			</ns2:resultat>
-		</ns2:respostaConsultaDades>
-	</RespostaOperacio>
-</Resposta>
+{"request":{"documentId":"47778894M","telefon":{"tipusTelefonid":2,"prefix":"0034","numero":"626213433"}},
+"response":{"codiMissatge":"01","descMissatge":"Document d'identificació i mòbil relacionats","nom":"Antoni","cognom1":"Llebaria","cognom2":"Seoane","correusElectronics":["allebaria@aoc.cat"],"codiAutenticacio":"0","assuranceLevel":"No informat","paisDocumentISO3166":"ES","canalRelacioPreferent":"D","tipusDocument":"1","autenticacioCodiPublic":"No informat"}}
 
 ```
 
@@ -800,126 +747,41 @@ Per més detalls sobre les especificacions de la missatgeria DSS corresponent a 
 
 [https://www.aoc.cat/Inici/SERVEIS/Signatura-electronica-i-seguretat/Validador/Com-utilitzar-ho](https://www.aoc.cat/Inici/SERVEIS/Signatura-electronica-i-seguretat/Validador/Com-utilitzar-ho).
 
-### Evidències generades en la validació amb contrasenya al mòbil (SMS) <a name="8"></a>
+### Evidència generada en la validació amb contrasenya al mòbil (SMS) <a name="8"></a>
 
-En cas de validació d'identitat amb contrasenya SMS al mòbil s'enregistren com evidència tant els missatges de l'operació de generació i enviament de la contrasenya així com la validació posterior.
-
-| _Exemple petició - generació i enviament de contrasenya_ |
+| _Exemple evidència enviament de contrasenya_ |
 | --- |
 ```xml
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Peticio xmlns:ns2="http://www.aoc.cat/pci/serveis-comuns/paraula-de-pas" xmlns="http://www.aoc.cat/pci/serveis-comuns">
-	<Operacio>GENERAR_PARAULA</Operacio>
-	<Aplicacio>APLICACIO</Aplicacio>
-	<Organisme>9821920002</Organisme>
-	<PeticioOperacio>
-		<ns2:peticioGenerarParaulaDePas>
-			<ns2:codiEns>9821920002</ns2:codiEns>
-			<ns2:identificador>435802ae-d120-4e93-9bd2-de6517fde197</ns2:identificador>
-			<ns2:nivell>0</ns2:nivell>
-			<ns2:reutilitzable>false</ns2:reutilitzable>
-			<ns2:sms>
-				<ns2:telefon>MOBIL</ns2:telefon>
-				<ns2:remitent>APLICACIO</ns2:remitent>
-			</ns2:sms>
-			<ns2:numeroIntents>3</ns2:numeroIntents>
-			<ns2:caducitat>10</ns2:caducitat>
-		</ns2:peticioGenerarParaulaDePas>
-	</PeticioOperacio>
-</Peticio>
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:adap="http://adaptors.j2ee.limsp.latinia.com">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <adap:putMessage soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <string xsi:type="xsd:string">
+            <![CDATA[
+               <message id="87571A13EC074BAEAEB67E9A076AF738" ts="1698314022606">
+                  <head>
+                     <type ref="sms">
+                        <format>text</format>
+                        <mroute>MT</mroute>
+                     </type>
+                     <info>
+                        <gsmDest>0034626213433</gsmDest>
+                        <idContract>1165</idContract>
+                        <numeroOrigen>idCATMobil</numeroOrigen>
+                     </info>
+                  </head>
+                  <body>
+                     <contentOut>Contrasenya : 468775
+@valid-pre.aoc.cat #468775</contentOut>
+                  </body>
+               </message>
+            ]]>
+         </string>
+      </adap:putMessage>
+   </soapenv:Body>
+</soapenv:Envelope>
 
-
-```
-
-
-| _Exemple resposta - generació i enviament de contrasenya_ |
-| --- |
-```xml
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Resposta xmlns:ns2="http://www.aoc.cat/pci/serveis-comuns/paraula-de-pas" xmlns="http://www.aoc.cat/pci/serveis-comuns">
-	<Operacio>GENERAR_PARAULA</Operacio>
-	<Aplicacio>APLICACIO</Aplicacio>
-	<Timestamp>2014-10-21T12:32:09.145+02:00</Timestamp>
-	<Organisme>9821920002</Organisme>
-	<Estat>
-		<CodiEstat>0003</CodiEstat>
-		<LiteralError/>
-	</Estat>
-	<RespostaOperacio>
-		<ns2:respostaGenerarParaulaDePas>
-			<ns2:peticioGenerarParaulaDePas>
-				<ns2:codiEns>9821920002</ns2:codiEns>
-				<ns2:identificador>435802ae-d120-4e93-9bd2-de6517fde197</ns2:identificador>
-				<ns2:nivell>0</ns2:nivell>
-				<ns2:reutilitzable>false</ns2:reutilitzable>
-				<ns2:sms>
-					<ns2:telefon>MOBIL</ns2:telefon>
-					<ns2:remitent>APLICACIO</ns2:remitent>
-				</ns2:sms>
-				<ns2:numeroIntents>3</ns2:numeroIntents>
-				<ns2:caducitat>10</ns2:caducitat>
-			</ns2:peticioGenerarParaulaDePas>
-			<ns2:resposta>
-				<ns2:paraulaDePas>787354</ns2:paraulaDePas>
-			</ns2:resposta>
-			<ns2:resultat>
-				<ns2:codiResultat>0</ns2:codiResultat>
-				<ns2:descripcio/>
-			</ns2:resultat>
-		</ns2:respostaGenerarParaulaDePas>
-	</RespostaOperacio>
-</Resposta>
-
-```
-
-Un cop l'usuari ha introduït la contrasenya es generen les evidències de validació.
-
-| _Exemple petició - validació de contrasenya_ |
-| --- |
-```xml
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Peticio xmlns:ns2="http://www.aoc.cat/pci/serveis-comuns/paraula-de-pas" xmlns="http://www.aoc.cat/pci/serveis-comuns">
-	<Operacio>VALIDAR_PARAULA</Operacio>
-	<Aplicacio>APLICACIO</Aplicacio>
-	<Organisme>9821920002</Organisme>
-	<PeticioOperacio>
-		<ns2:peticioValidarParaulaDePas>
-			<ns2:identificador>435802ae-d120-4e93-9bd2-de6517fde197</ns2:identificador>
-			<ns2:paraulaDePas>787354</ns2:paraulaDePas>
-			<ns2:sensibleMajuscules>false</ns2:sensibleMajuscules>
-		</ns2:peticioValidarParaulaDePas>
-	</PeticioOperacio>
-</Peticio>
-
-```
-
-| _Exemple resposta - validació de contrasenya_ |
-| --- |
-```xml
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Resposta xmlns:ns2="http://www.aoc.cat/pci/serveis-comuns/paraula-de-pas" xmlns="http://www.aoc.cat/pci/serveis-comuns">
-	<Operacio>VALIDAR_PARAULA</Operacio>
-	<Aplicacio>APLICACIO</Aplicacio>
-	<Timestamp>2014-10-21T12:32:29.810+02:00</Timestamp>
-	<Organisme>9821920002</Organisme>
-	<Estat>
-		<CodiEstat>0003</CodiEstat>
-		<LiteralError/>
-	</Estat>
-	<RespostaOperacio>
-		<ns2:respostaValidarParaulaDePas>
-			<ns2:peticioValidarParaulaDePas>
-				<ns2:identificador>435802ae-d120-4e93-9bd2-de6517fde197</ns2:identificador>
-				<ns2:paraulaDePas>787354</ns2:paraulaDePas>
-				<ns2:sensibleMajuscules>false</ns2:sensibleMajuscules>
-			</ns2:peticioValidarParaulaDePas>
-			<ns2:resultat>
-				<ns2:codiResultat>0</ns2:codiResultat>
-				<ns2:descripcio/>
-			</ns2:resultat>
-		</ns2:respostaValidarParaulaDePas>
-	</RespostaOperacio>
-</Resposta>
 
 ```
 
