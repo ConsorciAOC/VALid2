@@ -1,4 +1,4 @@
-# VALid
+# VALid 2.0
 
 ## **DI – VALId 2.0 (Validador d'identitats 2.0)**
 
