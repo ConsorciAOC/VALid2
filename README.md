@@ -25,7 +25,6 @@
     * [Evidències generades en la consulta a la Base de Dades de la Seu ](#6)
     * [Evidències generades en la validació amb certificat digital](#7)
     * [Evidències generades en la validació amb contrasenya al mòbil (SMS)](#8)
-    * [Evidències generades en la validació amb MobileID](#9)
     * [Evidències generades en la validació amb Cl@ve](#10)
 
 # 1 Introducció <a name="1"></a>
@@ -43,12 +42,12 @@ Per tal de registrar una aplicació client cal posar-se en contacte amb el Conso
 | Nom curt | Nom curt de la aplicació client que es vol integrar amb VALId (p.e. "eNOTUM"). |
 | Descripció | Descripció de la aplicació client (p.e. "Servei de notificacions electròniques del Consorci AOC"). |
 | Redirect URI | URL a la qual VALId haurà d'enviar el resultat de la autenticació (p.e. https://enotum.aoc.cat/code).  Es pot passar una llista amb més d'una URL de redirecció, tot i que no és el cas més habitual. |
-| Mètodes d'autenticació | Mètodes de validació que es vol emprar per a les autenticacions a la aplicació web client.Actualment es suporten els següents mecanismes:<br>- idCAT Mòbil (contrasenya SMS al mòbil).<br>- Certificat digital.<br>- [Cl@ve](#cl@ve)  del Ministerio de Hacienda y Administraciones Públicas.<br>- [idCAT MobileConnect](#idCATMobileConnect) de GSMA.<br>- [MobileID](#MobileID) de l'Ajuntament de Barcelona. |
-| Mètodes de signatura ordinària | Mètodes de validació que es vol emprar per a les signatures ordinàries que requereixen una autenticació addicional per part de l'usuari.Actualment es suporten els següents mecanismes:<br>- Contrasenya SMS al mòbil.<br>- Certificat digital. |
+| Mètodes d'autenticació | Mètodes de validació que es vol emprar per a les autenticacions a la aplicació web client.Actualment es suporten els següents mecanismes:<br>- idCAT Mòbil (contrasenya SMS al mòbil).<br>- Certificat digital.<br>- [Cl@ve](#cl@ve)  del Ministerio de Hacienda y Administraciones Públicas. |
+| Mètodes de signatura ordinària | Mètodes de validació que es vol emprar per a les signatures ordinàries que requereixen una autenticació addicional per part de l'usuari.Actualment es suporten els següents mecanismes:<br>- un senzill CAPTCHA. |
 | Recursos de personalització | CSSs i logos amb el que es presentaran les pantalles de validació d'identitats. |
 | IPs de les aplicacions clients | IPs de les aplicacions clients per tal d'habilitar l'accés als serveis de dades REST i els contexts de bescanvi de _tokens_ OAuth. |
 
-<br> - Cl@ve del Ministerio de Hacienda y Administraciones Públicas: [http://clave.gob.es](http://clave.gob.es/).<a name="cl@ve"></a><br> - MobileConnect de GSMA: [https://mobileconnect.io](https://mobileconnect.io/). <a name="idCATMobileConnect"></a><br> - MobileID de l'Ajuntament de Barcelona: [http://www.mobileid.cat](http://www.mobileid.cat/). <a name="MobileID"></a>
+<br> - Cl@ve del Ministerio de Hacienda y Administraciones Públicas: [http://clave.gob.es](http://clave.gob.es/).<a name="cl@ve"></a>
 
 Un cop la aplicació client hagi estat registrada, es proporcionarà als desenvolupadors de la integració una sèrie de codis que s'hauran d'usar en la invocació a VALId. Aquestes dades són:
 
@@ -277,8 +276,8 @@ La resposta obtinguda, en format JSON, conté les següents dades:
 | certificateType | En cas d'autenticació amb certificat digital, tipus de certificat:<br>- 0: Persona física<br>- 1: Persona jurídica<br>- 2: Component SSL<br>- 3: Seu electrònica<br>- 4: Segell electrònic<br>- 5: Empleat públic<br>- 6: Entitat sense personalitat jurídica<br>- 7: Empleat públic amb pseudònim<br>- 8: Qualificat de segell<br>- 9: Qualificat d'autenticació de lloc web<br>- 10: Certificat de segell de temps<br>- 11: Representant de persona jurídica<br>- 12: Representant d'entitat sense personalitat jurídica |
 | companyId | En cas d'autenticació amb certificat digital, CIF vinculat al certificat si aquest està informat. |
 | companyName | En cas d'autenticació amb certificat digital, nom de l'empresa vinculat al certificat si aquest està informat. |
-| method | Mètode d'autenticació emprat per l'usuari (_idcatmobil, certificat, clave, mobileid, mobileconnect_). |
-| assuranceLevel | Nivell de seguretat de l'autenticació practicada d'acord amb el ReIdAS (_low, substantial, high_):<br>- Baix: idCAT Mòbil acreditat telemàticament.<br>- Substancial: idCAT Mòbil acreditat amb certificat o presencialment, idCAT Mobile Connect, Cl@ve, certificat qualificat en programari.<br>- Alt: certificat qualificat en targeta. |
+| method | Mètode d'autenticació emprat per l'usuari (_idcatmobil, certificat, clave_). |
+| assuranceLevel | Nivell de seguretat de l'autenticació practicada d'acord amb el ReIdAS (_low, substantial, high_):<br>- Baix: idCAT Mòbil acreditat telemàticament.<br>- Substancial: idCAT Mòbil acreditat amb certificat o presencialment, Cl@ve, certificat qualificat en programari.<br>- Alt: certificat qualificat en targeta. |
 | error | En cas d'error, missatge descriptiu de l'error que s'ha produït. |
 
 ## 3.2 Evidències d'autenticació <a name="3.2"></a>
@@ -287,7 +286,6 @@ Quan l'usuari s'autentica al VALId es generen una sèrie d'evidències de cadasc
 
 - Consulta i resposta a la base de dades de la Seu Electrònica del Departament de Presidència i generació i validació de la contrasenya SMS d'un sol ús en cas d'autenticació amb IDCAT-SMS.
 - Verificació del certificat d'usuari en el cas d'autenticació amb certificat digital.
-- Inici d'autenticació i verificacions d'estat de l'autenticació mitjançant MobileID.
 - Missatges SAML en el cas d'autenticació amb Cl@ve.
 
 El servei d'obtenció d'evidències té un únic paràmetre, l'_access token_ obtingut per la aplicació client en el moment de fer la autenticació.
@@ -308,7 +306,7 @@ La resposta obtinguda, en format JSON, conté les següents dades:
 VALId ofereix dos mecanismes de signatura ordinària que es detallen a continuació:
 
 - Signatura ordinària a partir de l'_access token_ obtingut en el procés d'autenticació.
-- Signatura ordinària a partir de l_'acces token_ obtingut en el procés d'autenticació i una nova acció d'autenticació realitzada per l'usuari (p.e. contrasenya SMS al mòbil).
+- Signatura ordinària a partir de l_'acces token_ obtingut en el procés d'autenticació i una nova acció d'autenticació realitzada per l'usuari (un senzill CAPTCHA).
 
 ## 4.1 Signatura ordinària a partir de l'accés token <a name="4.1"></a>
 
@@ -330,19 +328,17 @@ El servei d'obtenció de la signatura té com a paràmetres (estructura JSON), l
 | algorithm | Algorisme emprat per calcular el resum criptogràfic del document. |
 | hash | Resum criptogràfic del document. |
 | metadata | Dades addicionals –text lliure- que s'incorporaran a l'evidència generada, vinculada al document. |
-| pdfEvidence | Opcional. Si s'informa l'atribut es generarà la versió imprimible en PDF de l'evidència de la signatura ordinària. |
 
 La resposta obtinguda, en format JSON, conté les següents dades:
 
 | status | Resultat de l'operació. Cadena de text que pot tenir el valor ok o ko. |
 | --- | --- |
 | evidence | Signatura XAdES-T amb l'evidència de la signatura ordinària codificada en Base64.<br> Per més detalls sobre l'evidència de la signatura consulteu l'apartat 4.3 d'aquest mateix document. |
-| pdfEvidence | Versió imprimible en format PDF de l'evidència de la signatura ordinària codificada en Base64. |
 | error | En cas d'error, descripció de l'error que s'ha produït. |
 
 ## 4.2 Signatura ordinària a partir de l'accés token i acció d'autenticació addicional <a name="4.2"></a>
 
-La seqüència de signatura s'inicia quan l'aplicació web que s'integra desitja generar una signatura ordinària però, a diferència del cas anterior, es vol que l'usuari realitzi una nova acció d'autenticació (p.e. informar una contrasenya d'un sòl ús SMS al seu mòbil).
+La seqüència de signatura s'inicia quan l'aplicació web que s'integra desitja generar una signatura ordinària però, a diferència del cas anterior, es vol que l'usuari realitzi una nova acció d'autenticació (un senzill CAPTCHA).
 
 Per fer-ho, l'aplicació web ha de realitzar una operació REST _initBasicSignature_ tot indicant l'_access token_ associat a l'usuari autenticat, una URL de redirecció de l'aplicació client on rebre el resultat de la signatura i les dades dels documents a signar:
 
@@ -363,7 +359,6 @@ El servei d'inici de signatura té com a paràmetres (estructura JSON), l'_acces
 | algorithm | Algorisme emprat per calcular el resum criptogràfic del document. |
 | hash | Resum criptogràfic del document. |
 | metadata | Dades addicionals –text lliure- que s'incorporaran a l'evidència generada, vinculada al document. |
-| pdfEvidence | Opcional. Si s'informa l'atribut es generarà la versió imprimible en PDF de l'evidència de la signatura ordinària. |
 
 La resposta obtinguda, en format JSON, conté les següents dades:
 
@@ -416,7 +411,6 @@ La resposta obtinguda, en format JSON, conté les següents dades:
 | status | Resultat de l'operació. Cadena de text que pot tenir el valor ok o ko. |
 | --- | --- |
 | evidence | Signatura XAdES-T amb l'evidència de la signatura ordinària codificada en Base64.<br> Per més detalls sobre l'evidència de la signatura consulteu l'apartat 4.3 d'aquest mateix document. |
-| pdfEvidence | Versió imprimible en format PDF de l'evidència de la signatura ordinària codificada en Base64. |
 | error | En cas d'error, descripció de l'error que s'ha produït. |
 
 ## 4.3 Consideracions sobre el resum criptogràfic <a name="4.3"></a>
@@ -456,7 +450,7 @@ La signatura ordinària està formada per una signatura XAdES-T que embolcalla (
 | metode | Mètode amb el que l'usuari s'ha autenticat:<br>- idcatmobil<br>- certificat<br>- clave<br>- mobileid<br>- mobileconnect | S |
 | identitat/evidencia | Evidències d'autenticació. Inclou tots els missatges de petició i resposta bescanviats entre el broker d'identitats i els diferents serveis d'autenticació. | S |
 | identitat/evidencia@dataGeneracio | Data de generació de la evidència. | S |
-| identitat/evidencia@tipus | Tipus d'evidència:<br>- bdseu-peticio / bdseu-resposta: evidències de la consulta de les dades de l'usuari a la BD de la seu<br>- autenticacio-inici-peticio / autenticacio-resposta-peticio / autenticacio-peticio / autenticacio-resposta: evidències d'autenticació en base al metode emprat en l'autenticació. Vegeu l'annex d'aquest document.<br> | S |
+| identitat/evidencia@tipus | Tipus d'evidència:<br>- bdseu-peticio / bdseu-resposta: evidències de la consulta de les dades de l'usuari a la BD de la seu<br>- autenticacio-inici-peticio / autenticacio-resposta-peticio: evidències d'autenticació. Vegeu l'annex d'aquest document.<br> | S |
 | identitat/document | Document identificatiu de l'usuari que realitza l'acte de signatura (p.e. NIF).<br>En cas d'autenticació amb certificat que té vinculat un CIF, aquest s'informarà en una altra ocurrència de l'element document. | S |
 | identitat/nom | Nom l'usuari que realitza l'acte de signatura. | S |
 | document/nom | Nom del document a signar tal i qual s'ha informat a la petició. | S |
@@ -464,7 +458,7 @@ La signatura ordinària està formada per una signatura XAdES-T que embolcalla (
 | document/algorisme | Algorisme usat per a calcular el resum criptogràfic | S |
 | document/metadades | Metadades informades en la petició, codificades en Base64. | N |
 
-| ![image](https://user-images.githubusercontent.com/32306731/137281698-9dfc2044-94f7-487f-a7d6-9a4e0707feb3.png)  L'evidència de signatura ordinària està conformada per l'agregació d'una sèrie d'evidències XML generades per cadascun dels serveis i mòduls que participen en la validació de la identitat d'un usuari en l'acte de la signatura dels documents referenciats (Base de dades de la Seu de la DGACD, servei de contrasenya al mòbil del CAOC o PSIS de CATCert, entre d'altres).<br> Algunes d'aquestes evidències no són autocontingudes -no estan signades digitalment- de manera que per tal de garantir-ne l'autenticitat i integritat, el Consorci AOC guarda traça de totes les accions realitzades en el procés de la validació de la identitat d'un usuari en un sistema de traces [certificades](#11) que podrà ser consultat sota demanda per part de l'organisme requeridor de la mateixa (consultes a la Base de dades de la Seu de la DGACD i crides als diferents serveis de validació d'identitats: contrasenya d'un sol ús SMS al mòbil, MobileID o validació de certificat digital contra PSIS de CATCert).
+| ![image](https://user-images.githubusercontent.com/32306731/137281698-9dfc2044-94f7-487f-a7d6-9a4e0707feb3.png)  L'evidència de signatura ordinària està conformada per l'agregació d'una sèrie d'evidències XML generades per cadascun dels serveis i mòduls que participen en la validació de la identitat d'un usuari en l'acte de la signatura dels documents referenciats (Base de dades de la Seu de la DGACD, servei de contrasenya al mòbil del CAOC o PSIS de CATCert, entre d'altres).<br> Algunes d'aquestes evidències no són autocontingudes -no estan signades digitalment- de manera que per tal de garantir-ne l'autenticitat i integritat, el Consorci AOC guarda traça de totes les accions realitzades en el procés de la validació de la identitat d'un usuari en un sistema de traces [certificades](#11) que podrà ser consultat sota demanda per part de l'organisme requeridor de la mateixa (consultes a la Base de dades de la Seu de la DGACD i crides als diferents serveis de validació d'identitats: contrasenya d'un sol ús SMS al mòbil, o validació de certificat digital contra PSIS de CATCert).
 
 ---
 
@@ -560,26 +554,59 @@ En cas d'autenticació amb certificat digital s'enregistra com evidència tant e
 | --- |
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Peticio xmlns:ns2="http://www.aoc.cat/pci/serveis-comuns/psis" xmlns="http://www.aoc.cat/pci/serveis-comuns">
-	<Operacio>VALIDAR_CERTIFICAT</Operacio>
-	<Aplicacio>APLICACIO</Aplicacio>
-	<Organisme>9821920002</Organisme>
-	<PeticioOperacio>
-		<ns2:peticioValidacioCertificat>
-			<ns2:X509Certificate>MIIIyjCCB7Kg (. . .) 3Q89ONGg==</ns2:X509Certificate>
-			<ns2:atributsDeCertificat>
-				<ns2:Extension.extKeyUsage/>
-				<ns2:KeyUsages/>
-				<ns2:SubjectEmail/>
-				<ns2:KeyOwnerNIF/>
-				<ns2:SubjectName/>
-				<ns2:ClassificationLevel/>
-				<ns2:CertIssuerName/>
-			</ns2:atributsDeCertificat>
-			<ns2:recuperarEvidencia>true</ns2:recuperarEvidencia>
-		</ns2:peticioValidacioCertificat>
-	</PeticioOperacio>
-</Peticio>
+<VerifyRequest>
+ <OptionalInputs>
+  <ReturnProcessingDetails/>
+  <ReturnX509CertificateInfo>
+   <AttributeDesignator Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectDistinguishedName:organizationName"/>
+   <AttributeDesignator Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectDistinguishedName:commonName"/>
+   <AttributeDesignator Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectDistinguishedName:surname"/>
+   <AttributeDesignator Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectDistinguishedName:givenName"/>
+   <AttributeDesignator Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectDistinguishedName:title"/>
+   <AttributeDesignator Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectDistinguishedName:serialNumber"/>
+   <AttributeDesignator Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectDistinguishedName:countryName"/>
+   <AttributeDesignator Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:IssuerDistinguishedName:commonName"/>
+   <AttributeDesignator Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:Version"/>
+   <AttributeDesignator Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SerialNumber"/>
+   <AttributeDesignator Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:IssuerDistinguishedName"/>
+   <AttributeDesignator Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectPublicKeyAlgorithm"/>
+   <AttributeDesignator Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectPublicKey"/>
+   <AttributeDesignator Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:KeyUsages"/>
+   <AttributeDesignator Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectEmail"/>
+   <AttributeDesignator Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:CertificatePolicies"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:professionalAssociations:ProfessionalAssociationName"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:professionalAssociations:ProfessionalAssociationInitials"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:professionalAssociations:ProfessionalAssociationNumber"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:professionalAssociations:ProfessionalAssociationZone"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:professionalAssociations:ProfessionalAssociationEmployeeNumber"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:KeyOwnerNIF"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:Title"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:LegalEntityCIF"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:LegalEntityGlobalCIF"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:ClassificationLevel"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:Department"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:issuerCA"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:CertificateType"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:CertificateTypeCode"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:VinculatedCompanyCIF"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:VinculatedCompanyName"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:VinculatedPersonFullName"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:VinculatedPersonName"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:VinculatedPersonNIForNIE"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:VinculatedPersonSurname"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:NaturalPersonIdentityType"/>
+   <AttributeDesignator Name="urn:catcert:psis:certificateAttributes:NaturalPersonCountryCode"/>
+  </ReturnX509CertificateInfo>
+  <ReturnSignedResponse/>
+ </OptionalInputs>
+ <SignatureObject>
+  <Other>
+   <X509Data>
+     <X509Certificate>MIIHKj (...) </X509Certificate>
+   </X509Data>
+  </Other>
+ </SignatureObject>
+</VerifyRequest>
 
 ```
 
@@ -587,50 +614,187 @@ En cas d'autenticació amb certificat digital s'enregistra com evidència tant e
 | --- |
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Resposta xmlns:ns2="http://www.aoc.cat/pci/serveis-comuns/psis" xmlns="http://www.aoc.cat/pci/serveis-comuns">
-	<Operacio>VALIDAR_CERTIFICAT</Operacio>
-	<Aplicacio>APLICACIO</Aplicacio>
-	<Timestamp>2014-10-21T11:48:16.051+02:00</Timestamp>
-	<Organisme>9821920002</Organisme>
-	<Estat>
-		<CodiEstat>0003</CodiEstat>
-		<LiteralError/>
-	</Estat>
-	<RespostaOperacio>
-		<ns2:respostaValidacioCertificat>
-			<ns2:resposta>
-				<ns2:esValid>true</ns2:esValid>
-				<ns2:missatgeEstat>urn:oasis:names:tc:dss:1.0:profiles:XSS:resultminor
-               :valid:certificate:Definitive</ns2:missatgeEstat>
-				<ns2:informacioAddicional>
-					<ns2:comentari>The signing key is inside its static validity interval.</ns2:comentari>
-					<ns2:comentari>The issuer of the given key is trusted.</ns2:comentari>
-					<ns2:comentari>The signing key is not revoked.</ns2:comentari>
-				</ns2:informacioAddicional>
-				<ns2:atributsDeCertificat>
-					<ns2:Extension.extKeyUsage/>
-					<ns2:KeyUsages>digitalSignature,nonRepudiation,keyEncipherment,
-                   dataEncipherment</ns2:KeyUsages>
-					<ns2:SubjectEmail>EMAIL</ns2:SubjectEmail>
-					<ns2:KeyOwnerNIF>NIF</ns2:KeyOwnerNIF>
-					<ns2:SubjectName>SUBJECT</ns2:SubjectName>
-					<ns2:ClassificationLevel>3</ns2:ClassificationLevel>
-					<ns2:CertIssuerName>Agencia Catalana de Certificacio
-               (NIF Q-0801176-I)</ns2:CertIssuerName>
-				</ns2:atributsDeCertificat>
-				<ns2:evidenciaResposta>PD94bWwgdmVyc (. . .) 25zZT4=</ns2:evidenciaResposta>
-			</ns2:resposta>
-			<ns2:resultat>
-				<ns2:codiResultat>0</ns2:codiResultat>
-				<ns2:descripcio>OK</ns2:descripcio>
-			</ns2:resultat>
-		</ns2:respostaValidacioCertificat>
-	</RespostaOperacio>
-</Resposta>
+<dss:VerifyResponse Profile="urn:oasis:names:tc:dss:1.0:profiles:XSS" xmlns:dss="urn:oasis:names:tc:dss:1.0:core:schema">
+			<dss:Result>
+				<dss:ResultMajor>urn:oasis:names:tc:dss:1.0:resultmajor:Success</dss:ResultMajor>
+				<dss:ResultMinor>urn:oasis:names:tc:dss:1.0:profiles:XSS:resultminor:valid:certificate:Definitive</dss:ResultMinor>
+			</dss:Result>
+			<dss:OptionalOutputs>
+				<dss:ProcessingDetails>
+					<dss:ValidDetail Type="urn:oasis:names:tc:dss:1.0:detail:ValidityInterval">
+						<dss:Message xml:lang="en">The signing key is inside its static validity interval.</dss:Message>
+					</dss:ValidDetail>
+					<dss:ValidDetail Type="urn:oasis:names:tc:dss:1.0:detail:IssuerTrust">
+						<dss:Message xml:lang="en">The issuer of the given key is trusted.</dss:Message>
+					</dss:ValidDetail>
+					<dss:ValidDetail Type="urn:oasis:names:tc:dss:1.0:detail:RevocationStatus">
+						<dss:Message xml:lang="en">The signing key is not revoked.</dss:Message>
+					</dss:ValidDetail>
+				</dss:ProcessingDetails>
+				<urn:X509CertificateInfo xmlns:urn="urn:oasis:names:tc:dss:1.0:profiles:XSS">
+					<urn:Attribute Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectDistinguishedName:organizationName">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Organització de prova</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectDistinguishedName:commonName">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Persona de la Peça de Prova - DNI 00000000T (TCAT)</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectDistinguishedName:surname">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">de la Peça de Prova - DNI 00000000T</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectDistinguishedName:givenName">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Persona</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectDistinguishedName:title">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Càrrec de prova</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectDistinguishedName:serialNumber">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">IDCES-00000000T</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectDistinguishedName:countryName">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">ES</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:IssuerDistinguishedName:commonName">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">EC-SectorPublic</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:Version">
+						<urn1:AttributeValue xsi:type="xs:integer" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">3</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SerialNumber">
+						<urn1:AttributeValue xsi:type="xs:integer" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">4663096142786113154784315765348532954</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:IssuerDistinguishedName">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">CN=EC-SectorPublic,OU=Serveis Públics de Certificació,O=CONSORCI ADMINISTRACIO OBERTA DE CATALUNYA,C=ES</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectPublicKeyAlgorithm">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">RSA</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectPublicKey">
+						<urn1:AttributeValue xsi:type="xs:base64Binary" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAj5jvzZq50EiXjtu8eKn+1lgiFtOKkYq4RFoiZGWr/CKJqtjwnVBXTlU3vqcIG0yUF6IUEEbgpL8g73nMGdOTN1/SKMFShoNujyMQqu61sjn80paLX43hfJjiNVtxCXlsQ90QhRbemIqL7UhtEOzQbIdbdqVn8+39p1Vy4ZWPGuV1Pp9uJa23uxcjju4ijkErrs2QAk5OrCifDcczIjI8FpmDcTsMBfwl3DtzBdJbTlA1C+Z0onpIWPF+xj+cps+fY6ZLj8VUxom20kGtEHpTWFbnjLtxJES0GrsRdCH23tzpLFiXwFxRrjPkw6485yoeAf6CgU6VPv/sBsXi0TjsaQIDAQAB</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:KeyUsages">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">digitalSignature,nonRepudiation,keyEncipherment</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:SubjectEmail">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">scd@aoc.cat</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:oasis:names:tc:dss:1.0:profiles:XSS:certificateAttributes:CertificatePolicies">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">1.3.6.1.4.1.15096.1.3.2.82.1,0.4.0.194112.1.2</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:professionalAssociations:ProfessionalAssociationName"/>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:professionalAssociations:ProfessionalAssociationInitials"/>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:professionalAssociations:ProfessionalAssociationNumber"/>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:professionalAssociations:ProfessionalAssociationZone"/>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:professionalAssociations:ProfessionalAssociationEmployeeNumber"/>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:KeyOwnerNIF">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">00000000T</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:Title">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Càrrec de prova</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:LegalEntityCIF">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Q0000000J</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:LegalEntityGlobalCIF">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">VATES-Q0000000J</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:ClassificationLevel">
+						<urn1:AttributeValue xsi:type="xs:integer" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">4</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:Department">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Persona vinculada de nivell alt</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:issuerCA">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">EC-SectorPublic</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:CertificateType">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Persona vinculada de nivell alt</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:CertificateTypeCode">
+						<urn1:AttributeValue xsi:type="xs:integer" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">0</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:VinculatedCompanyCIF">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Q0000000J</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:VinculatedCompanyName">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Organització de prova</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:VinculatedPersonFullName">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Persona de la Peça de Prova</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:VinculatedPersonName">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Persona</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:VinculatedPersonNIForNIE">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">00000000T</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:VinculatedPersonSurname">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">de la Peça de Prova</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:NaturalPersonIdentityType">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">IDC</urn1:AttributeValue>
+					</urn:Attribute>
+					<urn:Attribute Name="urn:catcert:psis:certificateAttributes:NaturalPersonCountryCode">
+						<urn1:AttributeValue xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:urn1="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">ES</urn1:AttributeValue>
+					</urn:Attribute>
+				</urn:X509CertificateInfo>
+				<urn:ResponseSignature xmlns:urn="urn:oasis:names:tc:dss:1.0:profiles:XSS">
+					<ds:Signature Id="id-63b37f2c-71fc-4f65-bf1a-d8a11e68e3ae" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+						<ds:SignedInfo Id="id-e2082c67-7868-4837-99c0-5e942e5f86a6">
+							<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+							<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+							<ds:Reference URI="" Id="id-b646502e-3d4c-48a2-88b1-bff5ba11ae21">
+								<ds:Transforms>
+									<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+								</ds:Transforms>
+								<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+								<ds:DigestValue>8V1vt0GhL36ft5RuSsQqX828Y5Y=</ds:DigestValue>
+							</ds:Reference>
+							<ds:Reference URI="#id-4c09cc36-ec7b-4e7b-9587-12435296cca5" Id="id-ad1448f5-1ea0-4dc8-97b0-89bfaf218322" Type="http://uri.etsi.org/01903#SignedProperties">
+								<ds:Transforms>
+									<ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+								</ds:Transforms>
+								<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+								<ds:DigestValue>ho5zBzZf1VNgffPXZ1ulYYw2KD8=</ds:DigestValue>
+							</ds:Reference>
+						</ds:SignedInfo>
+						<ds:SignatureValue Id="id-831f41b3-a52d-4a53-a126-b889961825fe">mU+9 (...) slg==</ds:SignatureValue>
+						<ds:KeyInfo>
+							<ds:X509Data>
+								<ds:X509Certificate>MIIG (...) lKN00=</ds:X509Certificate>
+							</ds:X509Data>
+							<ds:KeyValue>
+								<ds:RSAKeyValue>
+									<ds:Modulus>AOqEXweLeJKYIhYn+XTSsgoZoQm6osSFQTic5wI76/crGdux2Xqbaz4dHz1KMTe2n/VT9hR+FQgFO4VPLiZReR6bJJHO9y5X0o8vQmZ/tLwhGOlR37DM6ugdoZubwXLm9uGKlPI+gpiniX60XeqWh/S8xTmxyvK82Ee/6mnTTDsA50bkCJ3rGMp5ZOHzUXizGTaoj2bx6aJ1k8Wt0e19ZKs8JWBvFyuaBEWdo2zcHPnEG7hnKaB5KgBo9F+T0GhhAUU0+OMyP032KbZpvztcn/NBFfu9qRfxFC4yn+BYiCkvmNK6G9koLjKAw0WqbFp/dd6JR6O9LzRDVLQCK1XdWc0=</ds:Modulus>
+									<ds:Exponent>AQAB</ds:Exponent>
+								</ds:RSAKeyValue>
+							</ds:KeyValue>
+						</ds:KeyInfo>
+						<ds:Object Id="id-55bed222-336c-4bd7-95cf-258b24cb32c8">
+							<xades:QualifyingProperties Target="#id-63b37f2c-71fc-4f65-bf1a-d8a11e68e3ae" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#">
+								<xades:SignedProperties Id="id-4c09cc36-ec7b-4e7b-9587-12435296cca5">
+									<xades:SignedSignatureProperties>
+										<xades:SigningCertificate>
+											<xades:Cert>
+												<xades:CertDigest>
+													<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+													<ds:DigestValue>G05OIrUPLjsOdQV2ljdhCMbsQV8=</ds:DigestValue>
+												</xades:CertDigest>
+												<xades:IssuerSerial>
+													<ds:X509IssuerName>CN=EC-SectorPublic,OU=Serveis P\C3\BAblics de Certificaci\C3\B3,O=CONSORCI ADMINISTRACIO OBERTA DE CATALUNYA,C=ES</ds:X509IssuerName>
+													<ds:X509SerialNumber>152989983607946174710335949872320871922</ds:X509SerialNumber>
+												</xades:IssuerSerial>
+											</xades:Cert>
+										</xades:SigningCertificate>
+									</xades:SignedSignatureProperties>
+								</xades:SignedProperties>
+							</xades:QualifyingProperties>
+						</ds:Object>
+					</ds:Signature>
+				</urn:ResponseSignature>
+			</dss:OptionalOutputs>
+		</dss:VerifyResponse>
 
 ```
-
-La resposta original generada per PSIS s'incorpora a l'element //evidenciaResposta.
 
 Per més detalls sobre les especificacions de la missatgeria DSS corresponent a les respostes de PSIS podeu adreçar-vos a la pròpia especificació del servei:
 
@@ -756,50 +920,6 @@ Un cop l'usuari ha introduït la contrasenya es generen les evidències de valid
 		</ns2:respostaValidarParaulaDePas>
 	</RespostaOperacio>
 </Resposta>
-
-```
-
-### Evidències generades en la validació amb MobileID <a name="9"></a>
-
-En cas de validació d'identitat amb MobileID s'enregistren com evidència tant els missatges de les operacions d'inici de validació d'identitat i comprovacións de l'estat així com el XML definiu generat pel servei MobileID.
-
-| _Exemple petició – inici d'autenticació_ |
-| --- |
-|{tipusDocument='1', document='DOCUMENT', nivell='1', aplicacio='APLICACIO', origen='1', edatMinima='21'} |
-
-
-| _Exemple petició – consulta d'estat d'autenticació_ |
-| --- |
-|{token='1ZK2aFjB'} |
-
-
-| _Exemple resposta – resultat d'autenticació_ |
-| --- |
-```xml
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns2:userMobileDTO xmlns:ns2="http://idbcn.bcn.cat">
-	<alias/>
-	<birthday>YYYY-MM-DD</birthday>
-	<countryNac>-1</countryNac>
-	<countryRes>-1</countryRes>
-	<descripction>OK</descripction>
-	<email>EMAIL</email>
-	<email2>EMAIL</email2>
-	<emitterDocIdent>ES</emitterDocIdent>
-	<error>0</error>
-	<expirationDate>2024-10-21</expirationDate>
-	<identDocType>1</identDocType>
-	<identificationMode>WEB</identificationMode>
-	<identificationNumber>NIF</identificationNumber>
-	<mobileNumber>MOBIL</mobileNumber>
-	<name>NOM</name>
-	<photo/>
-	<reciveInfo>1</reciveInfo>
-	<status>2</status>
-	<surname1>COGNOM</surname1>
-	<surname2/>
-	<urlXmlSign>http://viafirmapre.firmaprofesional.com/premobileid/v/A5OF-A2J0-1413-9757-7439-9</urlXmlSign>
-</ns2:userMobileDTO>
 
 ```
 
