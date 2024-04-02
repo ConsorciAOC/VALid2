@@ -68,6 +68,7 @@ Es disposa de dos entorns:
 ---
 
 ![image](https://user-images.githubusercontent.com/32306731/137281698-9dfc2044-94f7-487f-a7d6-9a4e0707feb3.png) Recordeu que els entorns de DEV i PRE estan destinats únicament per a l'ús de proves i que d'acord amb el Supervisor Europeo de Protecció de Dades (EDPS) no es poden fer servir dades personals reals. Per això, als entorns de DEV i PRE, VALId es recolza en els serveis de preproducció que cada mecanisme d'identificació integrat a VALId ofereix.
+
 <br>• idCATMòbil: VALId es recolza en l'entorn de preproducció d'idCATMòbil (Base de Dades de la Seu-e de la Generalitat de Catalunya de preproducció). Podeu enregistrar usuaris de a l'entorn de preproducció per realitzar les vostres proves a l'autoregistre de l'idCATMòbil (https://idcatmobil-pre.seu.cat, fora de l'abast de VALId).
 
 <br>• Cl@ve: VALId es recolza en el Clave de l'entorn de Servicios Estables (preproducció) de manera que els usuaris que s'identificaran són els validats per aquest entorn (fora de l'abast de VALId).
