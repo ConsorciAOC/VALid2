@@ -76,6 +76,12 @@ Es disposa de dos entorns:
 <br>• Certificat: VALId es recolza en la plataforma de validació de certificats PSIS de preproducció de manera que també es suporten certificats emesos amb la jerarquia de proves de CATCert, Firmaprofesional i ANCERT.
 
 ---
+
+![image](https://user-images.githubusercontent.com/32306731/137281698-9dfc2044-94f7-487f-a7d6-9a4e0707feb3.png) Us suggerim que a l'hora de realitzar la vostra integració amb VALId tingueu present les recomanacions recollides al document <a href="
+https://apdcat.gencat.cat/ca/documentacio/guies_basiques/Guies-apdcat/la-privacitat-des-del-disseny-i-la-privacitat-per-defecte.-guia-per-a-desenvolupadors/"
+target="_blank">La privacitat des del disseny i la privacitat per defecte - Guia per a desenvolupadors"</a> de l'APDCAT.
+
+---
 # 2 Integració de l'aplicació client <a name="2"></a>
 
 VALId, basat en OAuth 2.0, permet que aplicacions desenvolupades en múltiples llenguatges de programació i tecnologies es puguin integrar fàcilment.
