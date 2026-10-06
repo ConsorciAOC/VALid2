@@ -273,7 +273,7 @@ El servei d'obtenció de dades de l'usuari té un únic paràmetre, l'_access to
 | _Mètode (GET)_ | https://valid-pre.aoc.cat/serveis-rest/getUserInfo |
 | --- | --- |
 | _Paràmetre_ | AccessToken |
-| _Resposta (exemple)_ | {<br>"status":"ok",<br>"identifier":"99999999R",<br>"prefix":"0034",<br>"phone":"609112233",<br>"documentType":"1"<br>} |
+| _Resposta (exemple)_ | {<br>"status":"ok",<br>"identifier":"99999999R",<br>"prefix":"0034",<br>"phone":"609112233",<br>"identifierType":"1"<br>} |
 
 La resposta obtinguda, en format JSON, conté les següents dades:
 
